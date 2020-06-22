@@ -6,18 +6,9 @@ interface TileProps {
     // onClick: () => void
 }
 
-interface TileState {
-    // value : number // stub
-}
+interface TileState { }
 
 class Tile extends Component<TileProps, TileState> {
-    // constructor(props : any) {
-    //     super(props);
-    //     // this.state = {
-    //     //     value: 0
-    //     // } // stub
-    // }
-
     render() {
         return (
             <div
