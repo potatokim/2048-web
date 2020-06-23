@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import Tile from "./Tile";
-import {BOARD_SIDE, GameState} from "./App";
+import {BOARD_SIDE, GameState} from "./Helpers";
 
 class Game extends Component<{gameState: GameState, tiles: number[][]}, {}> {
 

@@ -1,24 +1,8 @@
 import React, {Component} from 'react';
 import Game from "./Game";
-import {addRandomTile} from "./Helpers";
+import {addRandomTile, BOARD_SIDE, GameState, moveLeft, moveRight, moveDown, moveUp} from "./Helpers";
 
-export enum GameState {
-    RUNNING,
-    LOST,
-    WON
-}
-
-export enum MoveDirection {
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT
-}
-
-export const BOARD_SIDE : number = 4;
-export const EMPTY_TILE_VALUE : number = 0;
-
-interface AppState {
+export interface AppState {
     gameState : GameState,
     score : number,
     tiles: number[][],
@@ -55,45 +39,62 @@ class App extends Component<{}, AppState> {
         };
     }
 
-    generateNewGame(): void {
+    generateNewGame() : void {
         this.setState(() => {
             return this.getStartingState();
         });
     }
 
-    handleKeyLeft() {
-
+    handleKeyLeft(currState: Readonly<AppState>) : void {
+        let updatedState : AppState = Object.assign({}, currState);
+        moveLeft(updatedState);
+        this.setState(() => {
+            return updatedState;
+        });
     }
 
-    handleKeyRight() {
-
+    handleKeyRight(currState: Readonly<AppState>) : void {
+        let updatedState : AppState = Object.assign({}, currState);
+        moveRight(updatedState);
+        this.setState(() => {
+            return updatedState;
+        });
     }
 
-    handleKeyDown() {
+    handleKeyDown(currState: Readonly<AppState>) : void {
         console.log("123"); // stub
         // console.log(event.key); // stub
         // if (event.key === "ArrowDown") {
         //     console.log("Key Down");
         // }
+        let updatedState : AppState = Object.assign({}, currState);
+        moveDown(updatedState);
+        this.setState(() => {
+            return updatedState;
+        });
     }
 
-    handleKeyUp() {
-
+    handleKeyUp(currState: Readonly<AppState>) : void {
+        let updatedState : AppState = Object.assign({}, currState);
+        moveUp(updatedState);
+        this.setState(() => {
+            return updatedState;
+        });
     }
 
     render() {
         return (
             <div className="app">
                 <div className="header">2048</div>
-                <div className="score-block">Score: 0</div>
+                <div className="score-block">Score: {this.state.score}</div>
                 <button className="reset-button" onClick={() => this.generateNewGame()}>New Game</button>
                 <div>
-                    <button onClick={() => this.handleKeyLeft}>Left</button>
-                    <button onClick={() => this.handleKeyRight}>Right</button>
-                    <button onClick={() => this.handleKeyDown}>Down</button>
-                    <button onClick={() => this.handleKeyUp()}>Up</button>
+                    <button onClick={() => this.handleKeyLeft(this.state)}>Left</button>
+                    <button onClick={() => this.handleKeyRight(this.state)}>Right</button>
+                    <button onClick={() => this.handleKeyDown(this.state)}>Down</button>
+                    <button onClick={() => this.handleKeyUp(this.state)}>Up</button>
                 </div>
-                <div> <Game gameState={this.state.gameState} tiles={this.state.tiles}/> </div>
+                <div> <Game gameState={this.state.gameState} tiles={this.state.tiles} /> </div>
             </div>
         );
     }
