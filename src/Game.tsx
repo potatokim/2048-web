@@ -29,7 +29,6 @@ class Game extends Component<{gameState: GameState, tiles: number[][]}, {}> {
                 tiles.push(this.props.tiles[x][y]);
             }
         }
-        i = 0;
         return (
             <div className="game">
                 {tiles.map((tileValue : number) => {
