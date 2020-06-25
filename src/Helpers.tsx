@@ -13,9 +13,19 @@ export enum MoveDirection {
     RIGHT
 }
 
+export interface Coordinate {
+    x : number,
+    y : number
+}
+
 export const BOARD_SIDE : number = 4;
 export const EMPTY_TILE_VALUE : number = 0;
 export const TARGET : number = 2048;
+
+export function Coordinate(x : number, y : number) : Coordinate {
+    let c : Coordinate = {x, y};
+    return c;
+}
 
 /* Return a random integer from min up to max (excluding max) */
 export function generateRandomNumber(min : number, max : number): number {
@@ -29,18 +39,19 @@ export function addRandomTile(currState : AppState, tileValueIs2 : boolean) {
         x = generateRandomNumber(0, BOARD_SIDE);
         y = generateRandomNumber(0, BOARD_SIDE);
     } while (tiles[x][y] !== EMPTY_TILE_VALUE);
-    addTile(currState, x, y, tileValueIs2);
+
+    addTile(currState, Coordinate(x, y), tileValueIs2);
 }
 
-function addTile(currState : AppState, x : number, y : number, tileValueIs2 : boolean) {
+function addTile(currState : AppState, c : Coordinate, tileValueIs2 : boolean) {
     let tiles : number[][] = currState.tiles;
-    if (tiles[x][y] !== EMPTY_TILE_VALUE) {
+    if (tiles[c.x][c.y] !== EMPTY_TILE_VALUE) {
         alert("ERROR");
     } else {
         if (tileValueIs2) {
-            tiles[x][y] = 2;
+            tiles[c.x][c.y] = 2;
         } else {
-            tiles[x][y] = (Math.random() < 0.5) ? 2 : 4;
+            tiles[c.x][c.y] = (Math.random() < 0.5) ? 2 : 4;
         }
         currState.emptyTilesLeft--;
         if (currState.emptyTilesLeft === 0 && !isThereAnyAvailableMove(tiles))
@@ -53,23 +64,23 @@ export function moveLeft(currState : AppState) : void {
     for (let y : number = 0; y < BOARD_SIDE; y++) {
         for (let x : number = 0; x < BOARD_SIDE; x++) {
             if (tiles[x][y] !== EMPTY_TILE_VALUE) {
-                let i : number = findMergeableTile(tiles, x, y, MoveDirection.LEFT);
+                let i : number = findMergeableTile(tiles, Coordinate(x, y), MoveDirection.LEFT);
                 if (i !== -1) {
                     currState.moved = true;
-                    handleMerge(currState, x, y, i, true);
+                    handleMerge(currState, Coordinate(x, y), i, true);
                 }
-                gravityLeft(currState, x, y);
+                gravityLeft(currState, Coordinate(x, y));
             }
         }
     }
 }
 
-function gravityLeft(currState : AppState, x : number, y : number) : void {
+function gravityLeft(currState : AppState, c : Coordinate) : void {
     let tiles : number[][] = currState.tiles;
-    while (x > 0 && tiles[x-1][y] === EMPTY_TILE_VALUE) {
+    while (c.x > 0 && tiles[c.x-1][c.y] === EMPTY_TILE_VALUE) {
         currState.moved = true;
-        moveTileValue(tiles, x, y, x-1, y);
-        x--;
+        moveTileValue(tiles, c, Coordinate(c.x-1, c.y));
+        c.x--;
     }
 }
 
@@ -78,23 +89,23 @@ export function moveRight(currState : AppState) : void {
     for (let y : number = 0; y < BOARD_SIDE; y++) {
         for (let x : number = BOARD_SIDE - 1; x >= 0; x--) {
             if (tiles[x][y] !== EMPTY_TILE_VALUE) {
-                let i : number = findMergeableTile(tiles, x, y, MoveDirection.RIGHT);
+                let i : number = findMergeableTile(tiles, Coordinate(x, y), MoveDirection.RIGHT);
                 if (i !== -1) {
                     currState.moved = true;
-                    handleMerge(currState, x, y, i, true);
+                    handleMerge(currState, Coordinate(x, y), i, true);
                 }
-                gravityRight(currState, x, y);
+                gravityRight(currState, Coordinate(x, y));
             }
         }
     }
 }
 
-function gravityRight(currState : AppState, x : number, y : number) : void {
+function gravityRight(currState : AppState, c : Coordinate) : void {
     let tiles : number[][] = currState.tiles;
-    while (x < BOARD_SIDE - 1 && tiles[x+1][y] === EMPTY_TILE_VALUE) {
+    while (c.x < BOARD_SIDE - 1 && tiles[c.x+1][c.y] === EMPTY_TILE_VALUE) {
         currState.moved = true;
-        moveTileValue(tiles, x, y, x+1, y);
-        x++;
+        moveTileValue(tiles, c, Coordinate(c.x+1, c.y));
+        c.x++;
     }
 }
 
@@ -103,23 +114,23 @@ export function moveUp(currState : AppState) : void {
     for (let x : number = 0; x < BOARD_SIDE; x++) {
         for (let y : number = 0; y < BOARD_SIDE; y++) {
             if (tiles[x][y] !== EMPTY_TILE_VALUE) {
-                let i : number = findMergeableTile(tiles, x, y, MoveDirection.UP);
+                let i : number = findMergeableTile(tiles, Coordinate(x, y), MoveDirection.UP);
                 if (i !== -1) {
                     currState.moved = true;
-                    handleMerge(currState, x, y, i, false);
+                    handleMerge(currState, Coordinate(x, y), i, false);
                 }
-                gravityUp(currState, x, y);
+                gravityUp(currState, Coordinate(x, y));
             }
         }
     }
 }
 
-function gravityUp(currState : AppState, x : number, y : number) : void {
+function gravityUp(currState : AppState, c : Coordinate) : void {
     let tiles : number[][] = currState.tiles;
-    while (y > 0 && tiles[x][y-1] === EMPTY_TILE_VALUE) {
+    while (c.y > 0 && tiles[c.x][c.y-1] === EMPTY_TILE_VALUE) {
         currState.moved = true;
-        moveTileValue(tiles, x, y, x, y-1);
-        y--;
+        moveTileValue(tiles, c, Coordinate(c.x, c.y-1));
+        c.y--;
     }
 }
 
@@ -128,58 +139,58 @@ export function moveDown(currState : AppState) : void {
     for (let x : number = 0; x < BOARD_SIDE; x++) {
         for (let y : number = BOARD_SIDE - 1; y >= 0; y--) {
             if (tiles[x][y] !== EMPTY_TILE_VALUE) {
-                let i : number = findMergeableTile(tiles, x, y, MoveDirection.DOWN);
+                let i : number = findMergeableTile(tiles, Coordinate(x, y), MoveDirection.DOWN);
                 if (i !== -1) {
                     currState.moved = true;
-                    handleMerge(currState, x, y, i, false);
+                    handleMerge(currState, Coordinate(x, y), i, false);
                 }
-                gravityDown(currState, x, y);
+                gravityDown(currState, Coordinate(x, y));
             }
         }
     }
 }
 
-function gravityDown(currState : AppState, x : number, y : number) : void {
+function gravityDown(currState : AppState, c : Coordinate) : void {
     let tiles : number[][] = currState.tiles;
-    while (y < BOARD_SIDE - 1 && tiles[x][y+1] === EMPTY_TILE_VALUE) {
+    while (c.y < BOARD_SIDE - 1 && tiles[c.x][c.y+1] === EMPTY_TILE_VALUE) {
         currState.moved = true;
-        moveTileValue(tiles, x, y, x, y+1);
-        y++;
+        moveTileValue(tiles, c, Coordinate(c.x, c.y+1));
+        c.y++;
     }
 }
 
-function findMergeableTile(tiles : number[][], x : number, y : number, m : MoveDirection) : number {
-    let tileXYValue : number = tiles[x][y];
+function findMergeableTile(tiles : number[][], c : Coordinate, m : MoveDirection) : number {
+    let tileXYValue : number = tiles[c.x][c.y];
     switch (m) {
         case MoveDirection.UP:
-            for (let i : number = y+1; i < BOARD_SIDE; i++) {
-            if (tiles[x][i] !== tileXYValue && tiles[x][i] !== EMPTY_TILE_VALUE)
+            for (let i : number = c.y+1; i < BOARD_SIDE; i++) {
+            if (tiles[c.x][i] !== tileXYValue && tiles[c.x][i] !== EMPTY_TILE_VALUE)
                 break;
-            if (tiles[x][i] === tileXYValue)
+            if (tiles[c.x][i] === tileXYValue)
                 return i;
         }
             break;
         case MoveDirection.DOWN:
-            for (let i : number = y-1; i >= 0; i--) {
-            if (tiles[x][i] !== tileXYValue && tiles[x][i] !== EMPTY_TILE_VALUE)
+            for (let i : number = c.y-1; i >= 0; i--) {
+            if (tiles[c.x][i] !== tileXYValue && tiles[c.x][i] !== EMPTY_TILE_VALUE)
                 break;
-            if (tiles[x][i] === tileXYValue)
+            if (tiles[c.x][i] === tileXYValue)
                 return i;
         }
             break;
         case MoveDirection.LEFT:
-            for (let i : number = x+1; i < BOARD_SIDE; i++) {
-            if (tiles[i][y] !== tileXYValue && tiles[i][y] !== EMPTY_TILE_VALUE)
+            for (let i : number = c.x+1; i < BOARD_SIDE; i++) {
+            if (tiles[i][c.y] !== tileXYValue && tiles[i][c.y] !== EMPTY_TILE_VALUE)
                 break;
-            if (tiles[i][y] === tileXYValue)
+            if (tiles[i][c.y] === tileXYValue)
                 return i;
         }
             break;
         case MoveDirection.RIGHT:
-            for (let i : number = x-1; i >= 0; i--) {
-            if (tiles[i][y] !== tileXYValue && tiles[i][y] !== EMPTY_TILE_VALUE)
+            for (let i : number = c.x-1; i >= 0; i--) {
+            if (tiles[i][c.y] !== tileXYValue && tiles[i][c.y] !== EMPTY_TILE_VALUE)
                 break;
-            if (tiles[i][y] === tileXYValue)
+            if (tiles[i][c.y] === tileXYValue)
                 return i;
         }
             break;
@@ -189,46 +200,46 @@ function findMergeableTile(tiles : number[][], x : number, y : number, m : MoveD
     return -1;
 }
 
-function handleMerge(currState : AppState, x : number,  y : number,  i : number, isHorizontal : boolean) : void {
+function handleMerge(currState : AppState, c : Coordinate,  i : number, isHorizontal : boolean) : void {
     let tiles : number[][] = currState.tiles;
     if (isHorizontal)
-        mergeAndClearTiles(tiles, x, y, i, y);
+        mergeAndClearTiles(tiles, c, Coordinate(i, c.y));
     else
-        mergeAndClearTiles(tiles, x, y, x, i);
+        mergeAndClearTiles(tiles, c, Coordinate(c.x, i));
 
-    currState.score += tiles[x][y];
+    currState.score += tiles[c.x][c.y];
     currState.emptyTilesLeft++;
 
-    if (tiles[x][y] === TARGET)
+    if (tiles[c.x][c.y] === TARGET)
         currState.gameState = GameState.WON;
 }
 
-function moveTileValue(tiles : number[][], srcX : number, srcY : number, destX : number, destY : number) : void {
-    tiles[destX][destY] = tiles[srcX][srcY];
-    tiles[srcX][srcY] = EMPTY_TILE_VALUE;
+function moveTileValue(tiles : number[][], src : Coordinate, dest : Coordinate) : void {
+    tiles[dest.x][dest.y] = tiles[src.x][src.y];
+    tiles[src.x][src.y] = EMPTY_TILE_VALUE;
 }
 
-function mergeAndClearTiles(tiles : number[][], mergedX : number, mergedY : number, clearedX : number, clearedY : number) : void {
-    if (tiles[mergedX][mergedY] !== tiles[clearedX][clearedY]) {
+function mergeAndClearTiles(tiles : number[][], toMerge : Coordinate, toClear : Coordinate) : void {
+    if (tiles[toMerge.x][toMerge.y] !== tiles[toClear.x][toClear.y]) {
         console.log("ERROR");
     }
     else {
-        tiles[mergedX][mergedY] *= 2;
-        clear(tiles, clearedX, clearedY);
+        tiles[toMerge.x][toMerge.y] *= 2;
+        clear(tiles, toClear);
     }
 }
 
-function clear(tiles : number[][], x : number, y : number) : void {
-    tiles[x][y] = EMPTY_TILE_VALUE;
+function clear(tiles : number[][], c : Coordinate) : void {
+    tiles[c.x][c.y] = EMPTY_TILE_VALUE;
 }
 
 function isThereAnyAvailableMove(tiles : number[][]) : boolean {
     for (let y : number = 0; y < BOARD_SIDE; y++) {
         for (let x : number = 0; x < BOARD_SIDE; x++) {
-            if (findMergeableTile(tiles, x, y, MoveDirection.UP)    !== -1 ||
-                findMergeableTile(tiles, x, y, MoveDirection.DOWN)  !== -1 ||
-                findMergeableTile(tiles, x, y, MoveDirection.LEFT)  !== -1 ||
-                findMergeableTile(tiles, x, y, MoveDirection.RIGHT) !== -1)
+            if (findMergeableTile(tiles, Coordinate(x, y), MoveDirection.UP)    !== -1 ||
+                findMergeableTile(tiles, Coordinate(x, y), MoveDirection.DOWN)  !== -1 ||
+                findMergeableTile(tiles, Coordinate(x, y), MoveDirection.LEFT)  !== -1 ||
+                findMergeableTile(tiles, Coordinate(x, y), MoveDirection.RIGHT) !== -1)
                 return true;
         }
     }

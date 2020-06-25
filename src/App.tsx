@@ -48,7 +48,6 @@ class App extends Component<{}, AppState> {
             let updatedState : AppState = Object.assign({}, currState);
             updatedState.moved = false;
 
-            console.log(`CALLER START: ${updatedState.score}`);
             switch (m) {
                 case MoveDirection.LEFT:
                     moveLeft(updatedState);
@@ -68,7 +67,6 @@ class App extends Component<{}, AppState> {
                 addRandomTile(updatedState, false);
             }
 
-            console.log(`CALLER END: ${updatedState.score}`);
             this.setState(() => {
                 return updatedState;
             });
