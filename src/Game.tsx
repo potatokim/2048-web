@@ -29,6 +29,7 @@ class Game extends Component<{gameState: GameState, tiles: number[][]}, {}> {
                 tiles.push(this.props.tiles[x][y]);
             }
         }
+        // TODO: conditional rendering if lost / won
         return (
             <div className="game">
                 {tiles.map((tileValue : number) => {
@@ -36,8 +37,6 @@ class Game extends Component<{gameState: GameState, tiles: number[][]}, {}> {
                         key={i++}
                         value={tileValue}
                         style={this.chooseTileStyle(tileValue)}
-                        // onKeyDown={() => this.handleKeyDown()}
-                        // onClick={() => this.handleKeyDown()}
                     />;
                 })}
             </div>
