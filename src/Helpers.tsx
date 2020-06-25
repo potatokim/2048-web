@@ -74,15 +74,14 @@ function gravityLeft(currState : AppState, x : number, y : number) : void {
 }
 
 export function moveRight(currState : AppState) : void {
-    let updatedState : AppState = Object.assign({}, currState);
-    let tiles : number[][] = updatedState.tiles;
+    let tiles : number[][] = currState.tiles;
     for (let y : number = 0; y < BOARD_SIDE; y++) {
         for (let x : number = BOARD_SIDE - 1; x >= 0; x--) {
             if (tiles[x][y] !== EMPTY_TILE_VALUE) {
                 let i : number = findMergeableTile(tiles, x, y, MoveDirection.RIGHT);
                 if (i !== -1) {
                     currState.moved = true;
-                    handleMerge(updatedState, x, y, i, true);
+                    handleMerge(currState, x, y, i, true);
                 }
                 gravityRight(currState, x, y);
             }
@@ -100,15 +99,14 @@ function gravityRight(currState : AppState, x : number, y : number) : void {
 }
 
 export function moveUp(currState : AppState) : void {
-    let updatedState : AppState = Object.assign({}, currState);
-    let tiles : number[][] = updatedState.tiles;
+    let tiles : number[][] = currState.tiles;
     for (let x : number = 0; x < BOARD_SIDE; x++) {
         for (let y : number = 0; y < BOARD_SIDE; y++) {
             if (tiles[x][y] !== EMPTY_TILE_VALUE) {
                 let i : number = findMergeableTile(tiles, x, y, MoveDirection.UP);
                 if (i !== -1) {
                     currState.moved = true;
-                    handleMerge(updatedState, x, y, i, false);
+                    handleMerge(currState, x, y, i, false);
                 }
                 gravityUp(currState, x, y);
             }
@@ -126,15 +124,14 @@ function gravityUp(currState : AppState, x : number, y : number) : void {
 }
 
 export function moveDown(currState : AppState) : void {
-    let updatedState : AppState = Object.assign({}, currState);
-    let tiles : number[][] = updatedState.tiles;
+    let tiles : number[][] = currState.tiles;
     for (let x : number = 0; x < BOARD_SIDE; x++) {
         for (let y : number = BOARD_SIDE - 1; y >= 0; y--) {
             if (tiles[x][y] !== EMPTY_TILE_VALUE) {
                 let i : number = findMergeableTile(tiles, x, y, MoveDirection.DOWN);
                 if (i !== -1) {
                     currState.moved = true;
-                    handleMerge(updatedState, x, y, i, false);
+                    handleMerge(currState, x, y, i, false);
                 }
                 gravityDown(currState, x, y);
             }
@@ -201,6 +198,7 @@ function handleMerge(currState : AppState, x : number,  y : number,  i : number,
 
     currState.score += tiles[x][y];
     currState.emptyTilesLeft++;
+
     if (tiles[x][y] === TARGET)
         currState.gameState = GameState.WON;
 }
