@@ -1,4 +1,4 @@
-import {AppState} from "./App";
+import {AppState} from "./GameContainer";
 
 export enum GameState {
     RUNNING,

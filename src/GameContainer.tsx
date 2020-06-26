@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Game from "./Game";
+import GameComponent from "./GameComponent";
 import {
     addRandomTile,
     BOARD_SIDE,
@@ -19,7 +19,7 @@ export interface AppState {
     greatestTile : number,
     emptyTilesLeft : number
 }
-class App extends Component<{}, AppState> {
+class GameContainer extends Component<{}, AppState> {
 
     constructor(props : object) {
         super(props);
@@ -105,14 +105,18 @@ class App extends Component<{}, AppState> {
     render() {
         return (
             <div className="app">
-                <div className="header">2048</div>
-                <label className="score-block">Score: {this.state.score}</label>
-                <br />
-                <button className="reset-button" onClick={() => this.generateNewGame()}>New Game</button>
-                <div> <Game gameState={this.state.gameState} tiles={this.state.tiles} /> </div>
+                <div className="game">
+                    <div className="header">2048</div>
+                    <div className="status-block">
+                        <label className="score-block">Score: {this.state.score}</label>
+                        <br />
+                        <button className="reset-button" onClick={() => this.generateNewGame()}>New Game</button>
+                    </div>
+                    <div> <GameComponent gameState={this.state.gameState} tiles={this.state.tiles} /> </div>
+                </div>
             </div>
         );
     }
 }
 
-export default App;
+export default GameContainer;

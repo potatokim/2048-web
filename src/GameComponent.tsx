@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import Tile from "./Tile";
 import {BOARD_SIDE, GameState} from "./Helpers";
 
-class Game extends Component<{gameState: GameState, tiles: number[][]}, {}> {
+class GameComponent extends Component<{gameState: GameState, tiles: number[][]}, {}> {
 
     chooseTileStyle(tileValue : number) : {color: string, backgroundColor: string} {
         switch (tileValue) {
@@ -31,7 +31,7 @@ class Game extends Component<{gameState: GameState, tiles: number[][]}, {}> {
         }
         // TODO: conditional rendering if lost / won
         return (
-            <div className="game">
+            <div className="board">
                 {tiles.map((tileValue : number) => {
                     return <Tile
                         key={i++}
@@ -44,4 +44,4 @@ class Game extends Component<{gameState: GameState, tiles: number[][]}, {}> {
     }
 }
 
-export default Game;
+export default GameComponent;
