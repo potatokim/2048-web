@@ -54,6 +54,14 @@ body {
   padding: 10px;
 }
 
+.board-lost {
+
+}
+
+.board-won {
+
+}
+
 .tile {
   width: 120px;
   height: 120px;

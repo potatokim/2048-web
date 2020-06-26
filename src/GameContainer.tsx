@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import GameComponent from "./GameComponent";
+import React, {Component} from "react";
+import GameComponent from "./Components/GameComponent";
 import {
     addRandomTile,
     BOARD_SIDE,
@@ -12,20 +12,19 @@ import {
 } from "./Helpers";
 
 export interface AppState {
-    gameState : GameState,
-    score : number,
-    tiles: number[][],
-    moved : boolean,
-    greatestTile : number,
-    emptyTilesLeft : number
+    gameState       : GameState,
+    score           : number,
+    tiles           : number[][],
+    moved           : boolean,
+    greatestTile    : number,
+    emptyTilesLeft  : number
 }
 class GameContainer extends Component<{}, AppState> {
 
     constructor(props : object) {
         super(props);
         this.state = this.getStartingState();
-        this.move = this.move.bind(this);
-        // this.handleKeyDown = this.handleKeyDown.bind(this);
+        this.handleKeyDown = this.handleKeyDown.bind(this);
     }
 
     componentDidMount() : void {
@@ -104,17 +103,11 @@ class GameContainer extends Component<{}, AppState> {
 
     render() {
         return (
-            <div className="app">
-                <div className="game">
-                    <div className="header">2048</div>
-                    <div className="status-block">
-                        <label className="score-block">Score: {this.state.score}</label>
-                        <br />
-                        <button className="reset-button" onClick={() => this.generateNewGame()}>New Game</button>
-                    </div>
-                    <div> <GameComponent gameState={this.state.gameState} tiles={this.state.tiles} /> </div>
-                </div>
-            </div>
+            <GameComponent
+                gameState={this.state.gameState}
+                score={this.state.score}
+                tiles={this.state.tiles}
+                generateNewGame={this.generateNewGame}/>
         );
     }
 }
