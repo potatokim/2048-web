@@ -1,6 +1,15 @@
 import React, {Component} from 'react';
 import Game from "./Game";
-import {addRandomTile, BOARD_SIDE, GameState, MoveDirection, moveDown, moveLeft, moveRight, moveUp} from "./Helpers";
+import {
+    addRandomTile,
+    BOARD_SIDE,
+    GameState,
+    MoveDirection,
+    moveDown,
+    moveLeft,
+    moveRight,
+    moveUp
+} from "./Helpers";
 
 export interface AppState {
     gameState : GameState,
@@ -16,6 +25,26 @@ class App extends Component<{}, AppState> {
         super(props);
         this.state = this.getStartingState();
         this.move = this.move.bind(this);
+        // this.handleKeyDown = this.handleKeyDown.bind(this);
+    }
+
+    componentDidMount() : void {
+        document.addEventListener("keydown", (event : KeyboardEvent) => this.handleKeyDown(event));
+        // document.addEventListener("keydown", this.handleKeyDown)
+    }
+
+    componentWillUnmount() : void {
+        // document.removeEventListener("keydown", this.handleKeyDown); // cannot work because of anonymous function
+    }
+
+    handleKeyDown(event : KeyboardEvent) : any {
+        switch (event.key) {
+            case "ArrowLeft":   this.move(this.state, MoveDirection.LEFT);  return;
+            case "ArrowUp":     this.move(this.state, MoveDirection.UP);    return;
+            case "ArrowDown":   this.move(this.state, MoveDirection.DOWN);  return;
+            case "ArrowRight":  this.move(this.state, MoveDirection.RIGHT); return;
+            default:
+        }
     }
 
     getStartingState() : AppState {
@@ -77,14 +106,9 @@ class App extends Component<{}, AppState> {
         return (
             <div className="app">
                 <div className="header">2048</div>
-                <div className="score-block">Score: {this.state.score}</div>
+                <label className="score-block">Score: {this.state.score}</label>
+                <br />
                 <button className="reset-button" onClick={() => this.generateNewGame()}>New Game</button>
-                <div>
-                    <button onClick={() => this.move(this.state, MoveDirection.LEFT)}> Left</button>
-                    <button onClick={() => this.move(this.state, MoveDirection.RIGHT)}>Right</button>
-                    <button onClick={() => this.move(this.state, MoveDirection.DOWN)}> Down</button>
-                    <button onClick={() => this.move(this.state, MoveDirection.UP)}>   Up</button>
-                </div>
                 <div> <Game gameState={this.state.gameState} tiles={this.state.tiles} /> </div>
             </div>
         );

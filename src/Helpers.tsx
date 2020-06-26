@@ -23,8 +23,7 @@ export const EMPTY_TILE_VALUE : number = 0;
 export const TARGET : number = 2048;
 
 export function Coordinate(x : number, y : number) : Coordinate {
-    let c : Coordinate = {x, y};
-    return c;
+    return {x, y};
 }
 
 /* Return a random integer from min up to max (excluding max) */

@@ -1,5 +1,5 @@
 body {
-  font: 14px "Century Gothic", Futura, sans-serif;
+  font: 18px "Century Gothic", Futura, sans-serif;
   margin: 20px;
 }
 
@@ -12,11 +12,15 @@ body {
 }
 
 .score-block {
-
+  padding: 10px;
 }
 
 .reset-button {
-
+  font: 18px "Century Gothic", Futura, sans-serif;
+  border: hidden;
+  background-color: transparent;
+  outline: none;
+  padding: 10px;
 }
 
 .game {
