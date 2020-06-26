@@ -37,12 +37,34 @@ body {
 
 .reset-button {
   width: 120px;
-  font: 18px "Century Gothic", Futura, sans-serif;
+  padding: 10px;
+  margin-right: 10px;
   background-color: whitesmoke;
   border: hidden;
   outline: none;
-  padding: 10px;
+  font: 18px "Century Gothic", Futura, sans-serif;
   text-align: center;
+}
+
+
+.lost-label {
+  width: 120px;
+  padding: 10px;
+  background-color: indianred;
+  color: white;
+  text-align: center;
+}
+
+.won-label {
+  width: 120px;
+  padding: 10px;
+  background-color: gold;
+  color: white;
+  text-align: center;
+}
+
+.running-label {
+  display: none;
 }
 
 .board {
@@ -52,14 +74,6 @@ body {
   grid-gap: 10px;
   background-color: whitesmoke;
   padding: 10px;
-}
-
-.board-lost {
-
-}
-
-.board-won {
-
 }
 
 .tile {

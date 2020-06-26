@@ -3,7 +3,6 @@ import {BOARD_SIDE, GameState} from "../Helpers";
 import Tile from "./Tile";
 
 interface BoardProps {
-    gameState   : GameState,
     tiles       : number[][]
 }
 
@@ -34,18 +33,8 @@ class Board extends Component<BoardProps, {}> {
             }
         }
 
-        let className : string;
-        if (this.props.gameState === GameState.LOST) {
-            className = "board-lost";
-        } else if (this.props.gameState === GameState.WON) {
-            className = "board-won";
-            // TODO: conditional rendering
-        } else {
-            className = "board";
-        }
-
         return (
-            <div className={className}>
+            <div className="board">
                 {tiles.map((tileValue : number) => {
                     return <Tile
                         key={i++}
